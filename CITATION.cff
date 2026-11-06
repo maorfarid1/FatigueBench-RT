@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use FatigueBench-RT, please cite the paper below."
+title: "FatigueBench-RT: open benchmark for real-time probabilistic fatigue prognosis"
+authors:
+  - family-names: Farid
+    given-names: Maor
+    affiliation: "Leo AI, Inc."
+repository-code: "https://github.com/leoai-org/FatigueBench-RT"
+license: MIT
+preferred-citation:
+  type: article
+  title: "Physics-informed Bayesian neural networks for real-time fatigue life prediction and uncertainty quantification under non-stationary random loading, with an open benchmark (FatigueBench-RT)"
+  authors:
+    - family-names: Farid
+      given-names: Maor
+  journal: "International Journal of Fatigue"
+  status: submitted
+  year: 2026
