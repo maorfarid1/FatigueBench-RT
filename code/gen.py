@@ -11,6 +11,8 @@ import sys, pickle, numpy as np
 from multiprocessing import Pool
 from scipy.stats import skew as _skew, kurtosis as _kurt
 import fatigue_physics as fp
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
 
 SCEN = {
     "S1": dict(nonstat=False, nongauss=False, seq=False),   # stationary Gaussian
@@ -164,7 +166,7 @@ if __name__ == "__main__":
         trajs = p.map(simulate, [(scen, sd, variant) for sd in seeds], chunksize=4)
     trajs = [t for t in trajs if t["K_f"] is not None]
     tag = f"{scen}_{split}" + ("" if variant == "base" else f"_{variant}")
-    with open(f"/home/claude/paper/data/{tag}.pkl", "wb") as f:
+    with open(f"{ROOT}/data/{tag}.pkl", "wb") as f:
         pickle.dump(trajs, f)
     life = np.array([t["K_f"] for t in trajs])
     print(tag, len(trajs), "life blocks: median %.1f  [%.1f, %.1f]" % (np.median(life), life.min(), life.max()), flush=True)
