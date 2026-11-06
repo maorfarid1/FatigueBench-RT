@@ -22,24 +22,29 @@ Splits per scenario: 600 train, 150 validation, 250 test components. Stress test
 | File | Purpose |
 |---|---|
 | `code/fatigue_physics.py` | Basquin, Goodman, rainflow, Miner, Dirlik, Hermite model, spectral synthesis |
-| `gen.py` | trajectory generator (`python gen.py S3 train 600 31`) |
-| `run_gen.sh` | regenerates the full benchmark with the seeds used in the paper |
-| `features.py` | causal real-time features and targets |
-| `models.py` | Miner-RT, Dirlik-RT, ANN+GPR (Farid 2022), deep ensemble MLP and LSTM, PI-BNN, conformal calibration |
-| `metrics.py` | CRPS, MALE, NRMSE, alpha-lambda, PICP, MPIW, ECE, prognostic horizon |
-| `run_bench.py` | trains and evaluates methods on one scenario/split/seed |
-| `run_all.sh` | every experiment in the paper |
-| `fig_*.py`, `analysis.py` | figures and tables |
+| `code/gen.py` | trajectory generator (`python gen.py S3 train 600 31`) |
+| `code/run_gen.sh` | regenerates the full benchmark with the seeds used in the paper |
+| `code/features.py` | causal real-time features and targets |
+| `code/models.py` | Miner-RT, Dirlik-RT, ANN+GPR (Farid 2022), deep ensemble MLP and LSTM, PI-BNN, conformal calibration |
+| `code/metrics.py` | CRPS, MALE, NRMSE, alpha-lambda, PICP, MPIW, ECE, prognostic horizon |
+| `code/run_bench.py` | trains and evaluates methods on one scenario/split/seed |
+| `code/run_all.sh` | every experiment in the paper |
+| `code/fig_*.py`, `code/analysis.py` | figures and tables |
 
 ## Quick start
 
 ```bash
 pip install numpy scipy scikit-learn torch rainflow matplotlib
-bash run_gen.sh                      # about 1 h on 2 CPU cores
+cd code
+bash run_gen.sh                      # regenerates data/ (about 1 h on 2 CPU cores); the released data is already in data/
 python run_bench.py S3 --seed 0      # all methods on scenario S3
 ```
 
 To evaluate a new method, add a class with `fit(train, val, seed)` and `predict(test, rng)` returning `(point, samples)` to `models.py` and register it in `run_bench.py`.
+
+## Data and results
+
+`data/` holds every trajectory (pickled lists of dicts, one per component). `results/` holds the JSON metrics behind every table in the paper.
 
 ## Licence
 
