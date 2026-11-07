@@ -49,3 +49,20 @@ To evaluate a new method, add a class with `fit(train, val, seed)` and `predict(
 ## Licence
 
 Code: MIT. Data: CC BY 4.0.
+
+## Real-data test set: SAE keyhole tests
+
+`realdata/` turns the public SAE FD&E keyhole program (Tucker and Bussa, SAE 750038, 1975; data hosted at
+https://fde.uwaterloo.ca/Fde/Loads/Keyhole/keyhole.html, GPL) into FatigueBench-RT trajectories:
+
+```
+cd realdata
+python parse_keyhole.py      # 16 CA and 54 VA tests -> keyhole_tests.json
+python calib_keyhole.py      # load-life curve fitted on the CA tests only; Miner check on VA
+python local_strain.py       # FE notch stress (Kt = 3.12, S = 11.265 P[kN]) + Neuber + SWT, no keyhole data
+python build_real.py         # 47 failed VA tests -> data/REAL_keyhole.pkl
+cd ../code
+python run_real.py --train S4 --seed 0   # train on simulation, test on the real tests
+python real_analysis.py && python fig_real.py
+```
+The FE analysis of the keyhole specimen (SolidWorks Simulation 2020) was provided by Prof. M. Groper.

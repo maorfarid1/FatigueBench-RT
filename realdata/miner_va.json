@@ -1,0 +1,326 @@
+[
+ {
+  "id": "SM1-1",
+  "censored": false,
+  "K_f": 10.5,
+  "K_miner": 32.18374726547462
+ },
+ {
+  "id": "SM1-3",
+  "censored": false,
+  "K_f": 48.0,
+  "K_miner": 32.18374726547462
+ },
+ {
+  "id": "SM2-1",
+  "censored": false,
+  "K_f": 2220.0,
+  "K_miner": 500.8092813502597
+ },
+ {
+  "id": "SM2-2",
+  "censored": false,
+  "K_f": 565.0,
+  "K_miner": 500.8092813502597
+ },
+ {
+  "id": "SM2-3",
+  "censored": false,
+  "K_f": 767.0,
+  "K_miner": 500.8092813502597
+ },
+ {
+  "id": "SM3-1",
+  "censored": false,
+  "K_f": 24608.0,
+  "K_miner": 3429.6350528999933
+ },
+ {
+  "id": "SM3-2",
+  "censored": false,
+  "K_f": 31884.0,
+  "K_miner": 3429.6350528999933
+ },
+ {
+  "id": "SM3-3",
+  "censored": false,
+  "K_f": 25353.0,
+  "K_miner": 3429.6350528999933
+ },
+ {
+  "id": "SM4-2",
+  "censored": false,
+  "K_f": 24666.0,
+  "K_miner": 13567.34914800315
+ },
+ {
+  "id": "SM4-3",
+  "censored": true,
+  "K_f": 6742.0,
+  "K_miner": 13567.34914800315
+ },
+ {
+  "id": "SM5-1",
+  "censored": true,
+  "K_f": 85370.0,
+  "K_miner": 94577.10523178971
+ },
+ {
+  "id": "BM1-1",
+  "censored": false,
+  "K_f": 2.23,
+  "K_miner": 1.641499148798913
+ },
+ {
+  "id": "BM1-2",
+  "censored": false,
+  "K_f": 2.9,
+  "K_miner": 1.641499148798913
+ },
+ {
+  "id": "BM1-3",
+  "censored": false,
+  "K_f": 3.0,
+  "K_miner": 1.641499148798913
+ },
+ {
+  "id": "BM2-1",
+  "censored": false,
+  "K_f": 31.76,
+  "K_miner": 44.77006119931533
+ },
+ {
+  "id": "BM2-2",
+  "censored": false,
+  "K_f": 19.5,
+  "K_miner": 44.77006119931533
+ },
+ {
+  "id": "BM2-3",
+  "censored": false,
+  "K_f": 44.0,
+  "K_miner": 44.77006119931533
+ },
+ {
+  "id": "BM3-1",
+  "censored": false,
+  "K_f": 4944.0,
+  "K_miner": 2279.7860561081907
+ },
+ {
+  "id": "BM3-2",
+  "censored": false,
+  "K_f": 1053.8,
+  "K_miner": 2279.7860561081907
+ },
+ {
+  "id": "BM3-3",
+  "censored": false,
+  "K_f": 2626.0,
+  "K_miner": 2279.7860561081907
+ },
+ {
+  "id": "BM4-2",
+  "censored": true,
+  "K_f": 9910.0,
+  "K_miner": 4872.528528379838
+ },
+ {
+  "id": "BM4-3",
+  "censored": false,
+  "K_f": 4076.0,
+  "K_miner": 4872.528528379838
+ },
+ {
+  "id": "BM5-1",
+  "censored": true,
+  "K_f": 20630.0,
+  "K_miner": 11525.433566024114
+ },
+ {
+  "id": "TM1-1",
+  "censored": false,
+  "K_f": 8.9,
+  "K_miner": 4.71738217461521
+ },
+ {
+  "id": "TM1-2",
+  "censored": false,
+  "K_f": 16.0,
+  "K_miner": 4.71738217461521
+ },
+ {
+  "id": "TM1-3",
+  "censored": false,
+  "K_f": 14.0,
+  "K_miner": 4.71738217461521
+ },
+ {
+  "id": "TM2-1",
+  "censored": false,
+  "K_f": 537.0,
+  "K_miner": 212.61493688455184
+ },
+ {
+  "id": "TM2-2",
+  "censored": false,
+  "K_f": 193.0,
+  "K_miner": 212.61493688455184
+ },
+ {
+  "id": "TM2-3",
+  "censored": false,
+  "K_f": 86.0,
+  "K_miner": 212.61493688455184
+ },
+ {
+  "id": "TM3-1",
+  "censored": false,
+  "K_f": 6957.0,
+  "K_miner": 13818.345489080368
+ },
+ {
+  "id": "TM3-2",
+  "censored": false,
+  "K_f": 5780.0,
+  "K_miner": 13818.345489080368
+ },
+ {
+  "id": "TM3-3",
+  "censored": false,
+  "K_f": 5920.0,
+  "K_miner": 13818.345489080368
+ },
+ {
+  "id": "SR1-1",
+  "censored": false,
+  "K_f": 27.5,
+  "K_miner": 165.44506737097066
+ },
+ {
+  "id": "SR1-2",
+  "censored": false,
+  "K_f": 100.0,
+  "K_miner": 165.44506737097066
+ },
+ {
+  "id": "SR1-3",
+  "censored": false,
+  "K_f": 218.0,
+  "K_miner": 165.44506737097066
+ },
+ {
+  "id": "SR2-1",
+  "censored": true,
+  "K_f": 3300.0,
+  "K_miner": 2984.2804487493527
+ },
+ {
+  "id": "SR2-2",
+  "censored": true,
+  "K_f": 5535.0,
+  "K_miner": 2984.2804487493527
+ },
+ {
+  "id": "SR3-2",
+  "censored": false,
+  "K_f": 51124.0,
+  "K_miner": 10546.361573797178
+ },
+ {
+  "id": "SR4-1",
+  "censored": true,
+  "K_f": 106732.0,
+  "K_miner": 22668.0707175619
+ },
+ {
+  "id": "BR1-1",
+  "censored": false,
+  "K_f": 5.34,
+  "K_miner": 8.332703399783103
+ },
+ {
+  "id": "BR1-2",
+  "censored": false,
+  "K_f": 7.42,
+  "K_miner": 8.332703399783103
+ },
+ {
+  "id": "BR1-3",
+  "censored": false,
+  "K_f": 6.66,
+  "K_miner": 8.332703399783103
+ },
+ {
+  "id": "BR2-1",
+  "censored": false,
+  "K_f": 186.0,
+  "K_miner": 270.7608260949199
+ },
+ {
+  "id": "BR2-2",
+  "censored": false,
+  "K_f": 108.0,
+  "K_miner": 270.7608260949199
+ },
+ {
+  "id": "BR2-3",
+  "censored": false,
+  "K_f": 212.0,
+  "K_miner": 270.7608260949199
+ },
+ {
+  "id": "BR3-1",
+  "censored": false,
+  "K_f": 7673.0,
+  "K_miner": 17016.494044244424
+ },
+ {
+  "id": "BR3-3",
+  "censored": false,
+  "K_f": 12519.0,
+  "K_miner": 17016.494044244424
+ },
+ {
+  "id": "TR1-1",
+  "censored": false,
+  "K_f": 35.6,
+  "K_miner": 31.818173820427347
+ },
+ {
+  "id": "TR1-2",
+  "censored": false,
+  "K_f": 26.0,
+  "K_miner": 31.818173820427347
+ },
+ {
+  "id": "TR1-3",
+  "censored": false,
+  "K_f": 24.01,
+  "K_miner": 31.818173820427347
+ },
+ {
+  "id": "TR2-1",
+  "censored": false,
+  "K_f": 297.0,
+  "K_miner": 1431.8362152149186
+ },
+ {
+  "id": "TR2-2",
+  "censored": false,
+  "K_f": 520.0,
+  "K_miner": 1431.8362152149186
+ },
+ {
+  "id": "TR2-3",
+  "censored": false,
+  "K_f": 436.0,
+  "K_miner": 1431.8362152149186
+ },
+ {
+  "id": "TR3-1",
+  "censored": false,
+  "K_f": 57090.0,
+  "K_miner": 106524.8566805266
+ }
+]

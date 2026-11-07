@@ -1,0 +1,658 @@
+{
+ "ca": [
+  {
+   "id": "8FS",
+   "mat": "M",
+   "Pmax": 62300.0,
+   "Pmin": -62300.0,
+   "Nf_rev": 148.0
+  },
+  {
+   "id": "9FS",
+   "mat": "M",
+   "Pmax": 31100.0,
+   "Pmin": -31100.0,
+   "Nf_rev": 4740.0
+  },
+  {
+   "id": "10FS",
+   "mat": "M",
+   "Pmax": 22200.0,
+   "Pmin": -22200.0,
+   "Nf_rev": 21000.0
+  },
+  {
+   "id": "5R",
+   "mat": "M",
+   "Pmax": 27000.0,
+   "Pmin": 4400.0,
+   "Nf_rev": 124200.0
+  },
+  {
+   "id": "6R",
+   "mat": "M",
+   "Pmax": 23400.0,
+   "Pmin": 4400.0,
+   "Nf_rev": 304100.0
+  },
+  {
+   "id": "11FS",
+   "mat": "M",
+   "Pmax": 8900.0,
+   "Pmin": -8900.0,
+   "Nf_rev": 2428000.0
+  },
+  {
+   "id": "12FS",
+   "mat": "R",
+   "Pmax": 66700.0,
+   "Pmin": -66700.0,
+   "Nf_rev": 394.0
+  },
+  {
+   "id": "4CT",
+   "mat": "R",
+   "Pmax": 62300.0,
+   "Pmin": -62300.0,
+   "Nf_rev": 650.0
+  },
+  {
+   "id": "13FS",
+   "mat": "R",
+   "Pmax": 35600.0,
+   "Pmin": -35600.0,
+   "Nf_rev": 9000.0
+  },
+  {
+   "id": "14FS",
+   "mat": "R",
+   "Pmax": 17800.0,
+   "Pmin": -17800.0,
+   "Nf_rev": 171240.0
+  },
+  {
+   "id": "3CT",
+   "mat": "R",
+   "Pmax": 17800.0,
+   "Pmin": -17800.0,
+   "Nf_rev": 308800.0
+  },
+  {
+   "id": "2CT",
+   "mat": "R",
+   "Pmax": 17800.0,
+   "Pmin": -17800.0,
+   "Nf_rev": 339000.0
+  },
+  {
+   "id": "15FS",
+   "mat": "R",
+   "Pmax": 15600.0,
+   "Pmin": -15600.0,
+   "Nf_rev": 501800.0
+  },
+  {
+   "id": "7R",
+   "mat": "R",
+   "Pmax": 31200.0,
+   "Pmin": 4400.0,
+   "Nf_rev": 632000.0
+  },
+  {
+   "id": "1CT",
+   "mat": "R",
+   "Pmax": 13200.0,
+   "Pmin": -13200.0,
+   "Nf_rev": 1381000.0
+  },
+  {
+   "id": "16FS",
+   "mat": "R",
+   "Pmax": 13200.0,
+   "Pmin": -13200.0,
+   "Nf_rev": 2232000.0
+  }
+ ],
+ "va": [
+  {
+   "id": "SM1-1",
+   "history": "suspension",
+   "mat": "M",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 10.5,
+   "K_init": 8.0,
+   "censored": false
+  },
+  {
+   "id": "SM1-3",
+   "history": "suspension",
+   "mat": "M",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 48.0,
+   "K_init": 25.0,
+   "censored": false
+  },
+  {
+   "id": "SM2-1",
+   "history": "suspension",
+   "mat": "M",
+   "level": 2,
+   "Pext": -40000.0,
+   "K_f": 2220.0,
+   "K_init": 480.0,
+   "censored": false
+  },
+  {
+   "id": "SM2-2",
+   "history": "suspension",
+   "mat": "M",
+   "level": 2,
+   "Pext": -40000.0,
+   "K_f": 565.0,
+   "K_init": 208.0,
+   "censored": false
+  },
+  {
+   "id": "SM2-3",
+   "history": "suspension",
+   "mat": "M",
+   "level": 2,
+   "Pext": -40000.0,
+   "K_f": 767.0,
+   "K_init": 170.0,
+   "censored": false
+  },
+  {
+   "id": "SM3-1",
+   "history": "suspension",
+   "mat": "M",
+   "level": 3,
+   "Pext": -26700.0,
+   "K_f": 24608.0,
+   "K_init": 1760.0,
+   "censored": false
+  },
+  {
+   "id": "SM3-2",
+   "history": "suspension",
+   "mat": "M",
+   "level": 3,
+   "Pext": -26700.0,
+   "K_f": 31884.0,
+   "K_init": 2240.0,
+   "censored": false
+  },
+  {
+   "id": "SM3-3",
+   "history": "suspension",
+   "mat": "M",
+   "level": 3,
+   "Pext": -26700.0,
+   "K_f": 25353.0,
+   "K_init": 1516.0,
+   "censored": false
+  },
+  {
+   "id": "SM4-2",
+   "history": "suspension",
+   "mat": "M",
+   "level": 4,
+   "Pext": -20000.0,
+   "K_f": 24666.0,
+   "K_init": 4866.0,
+   "censored": false
+  },
+  {
+   "id": "SM4-3",
+   "history": "suspension",
+   "mat": "M",
+   "level": 4,
+   "Pext": -20000.0,
+   "K_f": 6742.0,
+   "K_init": null,
+   "censored": true
+  },
+  {
+   "id": "SM5-1",
+   "history": "suspension",
+   "mat": "M",
+   "level": 5,
+   "Pext": -13300.0,
+   "K_f": 85370.0,
+   "K_init": null,
+   "censored": true
+  },
+  {
+   "id": "BM1-1",
+   "history": "bracket",
+   "mat": "M",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 2.23,
+   "K_init": 1.5,
+   "censored": false
+  },
+  {
+   "id": "BM1-2",
+   "history": "bracket",
+   "mat": "M",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 2.9,
+   "K_init": 2.67,
+   "censored": false
+  },
+  {
+   "id": "BM1-3",
+   "history": "bracket",
+   "mat": "M",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 3.0,
+   "K_init": 2.0,
+   "censored": false
+  },
+  {
+   "id": "BM2-1",
+   "history": "bracket",
+   "mat": "M",
+   "level": 2,
+   "Pext": -35600.0,
+   "K_f": 31.76,
+   "K_init": 20.8,
+   "censored": false
+  },
+  {
+   "id": "BM2-2",
+   "history": "bracket",
+   "mat": "M",
+   "level": 2,
+   "Pext": -35600.0,
+   "K_f": 19.5,
+   "K_init": null,
+   "censored": false
+  },
+  {
+   "id": "BM2-3",
+   "history": "bracket",
+   "mat": "M",
+   "level": 2,
+   "Pext": -35600.0,
+   "K_f": 44.0,
+   "K_init": 23.0,
+   "censored": false
+  },
+  {
+   "id": "BM3-1",
+   "history": "bracket",
+   "mat": "M",
+   "level": 3,
+   "Pext": -15600.0,
+   "K_f": 4944.0,
+   "K_init": 1680.0,
+   "censored": false
+  },
+  {
+   "id": "BM3-2",
+   "history": "bracket",
+   "mat": "M",
+   "level": 3,
+   "Pext": -15600.0,
+   "K_f": 1053.8,
+   "K_init": 1021.0,
+   "censored": false
+  },
+  {
+   "id": "BM3-3",
+   "history": "bracket",
+   "mat": "M",
+   "level": 3,
+   "Pext": -15600.0,
+   "K_f": 2626.0,
+   "K_init": 679.0,
+   "censored": false
+  },
+  {
+   "id": "BM4-2",
+   "history": "bracket",
+   "mat": "M",
+   "level": 4,
+   "Pext": -13300.0,
+   "K_f": 9910.0,
+   "K_init": 3367.0,
+   "censored": true
+  },
+  {
+   "id": "BM4-3",
+   "history": "bracket",
+   "mat": "M",
+   "level": 4,
+   "Pext": -13300.0,
+   "K_f": 4076.0,
+   "K_init": 2660.0,
+   "censored": false
+  },
+  {
+   "id": "BM5-1",
+   "history": "bracket",
+   "mat": "M",
+   "level": 5,
+   "Pext": -11100.0,
+   "K_f": 20630.0,
+   "K_init": null,
+   "censored": true
+  },
+  {
+   "id": "TM1-1",
+   "history": "transmission",
+   "mat": "M",
+   "level": 1,
+   "Pext": 71200.0,
+   "K_f": 8.9,
+   "K_init": null,
+   "censored": false
+  },
+  {
+   "id": "TM1-2",
+   "history": "transmission",
+   "mat": "M",
+   "level": 1,
+   "Pext": 71200.0,
+   "K_f": 16.0,
+   "K_init": 16.0,
+   "censored": false
+  },
+  {
+   "id": "TM1-3",
+   "history": "transmission",
+   "mat": "M",
+   "level": 1,
+   "Pext": 71200.0,
+   "K_f": 14.0,
+   "K_init": null,
+   "censored": false
+  },
+  {
+   "id": "TM2-1",
+   "history": "transmission",
+   "mat": "M",
+   "level": 2,
+   "Pext": 35600.0,
+   "K_f": 537.0,
+   "K_init": 420.0,
+   "censored": false
+  },
+  {
+   "id": "TM2-2",
+   "history": "transmission",
+   "mat": "M",
+   "level": 2,
+   "Pext": 35600.0,
+   "K_f": 193.0,
+   "K_init": 182.0,
+   "censored": false
+  },
+  {
+   "id": "TM2-3",
+   "history": "transmission",
+   "mat": "M",
+   "level": 2,
+   "Pext": 35600.0,
+   "K_f": 86.0,
+   "K_init": 74.0,
+   "censored": false
+  },
+  {
+   "id": "TM3-1",
+   "history": "transmission",
+   "mat": "M",
+   "level": 3,
+   "Pext": 15600.0,
+   "K_f": 6957.0,
+   "K_init": 5527.0,
+   "censored": false
+  },
+  {
+   "id": "TM3-2",
+   "history": "transmission",
+   "mat": "M",
+   "level": 3,
+   "Pext": 15600.0,
+   "K_f": 5780.0,
+   "K_init": 4270.0,
+   "censored": false
+  },
+  {
+   "id": "TM3-3",
+   "history": "transmission",
+   "mat": "M",
+   "level": 3,
+   "Pext": 15600.0,
+   "K_f": 5920.0,
+   "K_init": 3772.0,
+   "censored": false
+  },
+  {
+   "id": "SR1-1",
+   "history": "suspension",
+   "mat": "R",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 27.5,
+   "K_init": null,
+   "censored": false
+  },
+  {
+   "id": "SR1-2",
+   "history": "suspension",
+   "mat": "R",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 100.0,
+   "K_init": 26.0,
+   "censored": false
+  },
+  {
+   "id": "SR1-3",
+   "history": "suspension",
+   "mat": "R",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 218.0,
+   "K_init": 63.0,
+   "censored": false
+  },
+  {
+   "id": "SR2-1",
+   "history": "suspension",
+   "mat": "R",
+   "level": 2,
+   "Pext": -40000.0,
+   "K_f": 3300.0,
+   "K_init": 1800.0,
+   "censored": true
+  },
+  {
+   "id": "SR2-2",
+   "history": "suspension",
+   "mat": "R",
+   "level": 2,
+   "Pext": -40000.0,
+   "K_f": 5535.0,
+   "K_init": 950.0,
+   "censored": true
+  },
+  {
+   "id": "SR3-2",
+   "history": "suspension",
+   "mat": "R",
+   "level": 3,
+   "Pext": -31100.0,
+   "K_f": 51124.0,
+   "K_init": 11098.0,
+   "censored": false
+  },
+  {
+   "id": "SR4-1",
+   "history": "suspension",
+   "mat": "R",
+   "level": 4,
+   "Pext": -26700.0,
+   "K_f": 106732.0,
+   "K_init": 51716.0,
+   "censored": true
+  },
+  {
+   "id": "BR1-1",
+   "history": "bracket",
+   "mat": "R",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 5.34,
+   "K_init": 3.34,
+   "censored": false
+  },
+  {
+   "id": "BR1-2",
+   "history": "bracket",
+   "mat": "R",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 7.42,
+   "K_init": 5.1,
+   "censored": false
+  },
+  {
+   "id": "BR1-3",
+   "history": "bracket",
+   "mat": "R",
+   "level": 1,
+   "Pext": -71200.0,
+   "K_f": 6.66,
+   "K_init": 4.0,
+   "censored": false
+  },
+  {
+   "id": "BR2-1",
+   "history": "bracket",
+   "mat": "R",
+   "level": 2,
+   "Pext": -35600.0,
+   "K_f": 186.0,
+   "K_init": 61.0,
+   "censored": false
+  },
+  {
+   "id": "BR2-2",
+   "history": "bracket",
+   "mat": "R",
+   "level": 2,
+   "Pext": -35600.0,
+   "K_f": 108.0,
+   "K_init": null,
+   "censored": false
+  },
+  {
+   "id": "BR2-3",
+   "history": "bracket",
+   "mat": "R",
+   "level": 2,
+   "Pext": -35600.0,
+   "K_f": 212.0,
+   "K_init": 94.0,
+   "censored": false
+  },
+  {
+   "id": "BR3-1",
+   "history": "bracket",
+   "mat": "R",
+   "level": 3,
+   "Pext": -15600.0,
+   "K_f": 7673.0,
+   "K_init": 2722.0,
+   "censored": false
+  },
+  {
+   "id": "BR3-3",
+   "history": "bracket",
+   "mat": "R",
+   "level": 3,
+   "Pext": -15600.0,
+   "K_f": 12519.0,
+   "K_init": 11745.0,
+   "censored": false
+  },
+  {
+   "id": "TR1-1",
+   "history": "transmission",
+   "mat": "R",
+   "level": 1,
+   "Pext": 71200.0,
+   "K_f": 35.6,
+   "K_init": 31.0,
+   "censored": false
+  },
+  {
+   "id": "TR1-2",
+   "history": "transmission",
+   "mat": "R",
+   "level": 1,
+   "Pext": 71200.0,
+   "K_f": 26.0,
+   "K_init": 23.5,
+   "censored": false
+  },
+  {
+   "id": "TR1-3",
+   "history": "transmission",
+   "mat": "R",
+   "level": 1,
+   "Pext": 71200.0,
+   "K_f": 24.01,
+   "K_init": null,
+   "censored": false
+  },
+  {
+   "id": "TR2-1",
+   "history": "transmission",
+   "mat": "R",
+   "level": 2,
+   "Pext": 35600.0,
+   "K_f": 297.0,
+   "K_init": null,
+   "censored": false
+  },
+  {
+   "id": "TR2-2",
+   "history": "transmission",
+   "mat": "R",
+   "level": 2,
+   "Pext": 35600.0,
+   "K_f": 520.0,
+   "K_init": 509.0,
+   "censored": false
+  },
+  {
+   "id": "TR2-3",
+   "history": "transmission",
+   "mat": "R",
+   "level": 2,
+   "Pext": 35600.0,
+   "K_f": 436.0,
+   "K_init": 239.0,
+   "censored": false
+  },
+  {
+   "id": "TR3-1",
+   "history": "transmission",
+   "mat": "R",
+   "level": 3,
+   "Pext": 15600.0,
+   "K_f": 57090.0,
+   "K_init": 57090.0,
+   "censored": false
+  }
+ ]
+}
