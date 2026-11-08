@@ -66,3 +66,14 @@ python run_real.py --train S4 --seed 0   # train on simulation, test on the real
 python real_analysis.py && python fig_real.py
 ```
 The FE analysis of the keyhole specimen (SolidWorks Simulation 2020) was provided by Prof. M. Groper.
+
+## Adapting to a new component family (few-shot)
+
+```
+cd code
+python gen.py S4 train 600 71 wide && python gen.py S4 val 150 72 wide   # domain-randomized pretraining set
+bash run_ft.sh S4 && bash run_ft.sh S4_wide                              # leave-one-group-out, k = 3, 5, 10, 20, all; 5 seeds
+python -c "import ft_analysis as f; f.make_outputs()"
+```
+Each SAE history/steel group is predicted by a model pretrained on simulation and fine-tuned on tests of the
+other groups only; conformal factors come from an inner leave-one-group-out loop on the training groups.

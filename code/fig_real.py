@@ -92,7 +92,7 @@ for m in BASE:
     for suf, lab in [("", SHORT[m]), (" + CP(real)", "\\quad + CP (real)")]:
         r = S["methods"][m + suf]
         rows.append(f"{lab} & {r['CRPS'][0]:.2f} & {r['MALE'][0]:.2f} & {r['PICP90'][0]:.2f} & {r['MPIW90'][0]:.1f} & {r['ECE'][0]:.3f} \\\\")
-tab = r"""\begin{table}[t]
+tab = r"""\begin{table}[!htbp]
 \centering
 \caption{Simulation-to-real test on the 47 SAE keyhole variable-amplitude tests that failed (three service histories, two steels, lives from 2.2 to 57,090 blocks). All learned models are trained on FatigueBench-RT S4 only; mean of 3 seeds. ``+ CP (real)'': split-conformal rescaling calibrated, for each history and steel group, on the five other groups (no data of the tested group). CRPS and MPIW90 on log RUL.}
 \label{tab:real}

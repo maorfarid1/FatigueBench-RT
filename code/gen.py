@@ -11,8 +11,6 @@ import sys, pickle, numpy as np
 from multiprocessing import Pool
 from scipy.stats import skew as _skew, kurtosis as _kurt
 import fatigue_physics as fp
-import os as _os
-ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
 
 SCEN = {
     "S1": dict(nonstat=False, nongauss=False, seq=False),   # stationary Gaussian
@@ -22,6 +20,7 @@ SCEN = {
 }
 SAE_MATERIALS = [(917.0, -0.095, 565.0), (1160.0, -0.075, 820.0)]  # Man-Ten, RQC-100 (SAE program)
 EPS_SIG = 0.25     # log-std of unobserved material life scatter
+EPS_WIDE = 0.7     # wider scatter of the domain-randomised variant (Miner sum at failure within x4 at 2 sd)
 NOISE = 0.02       # sensor noise level relative to load rms
 MAX_BLOCKS = 1500
 N_CAL = 4          # calibration windows per regime type
@@ -70,7 +69,9 @@ def _simulate(scen, seed, variant):
             sf, b, su = SAE_MATERIALS[rng.integers(0, 2)]
         else:
             sf, b, su = rng.uniform(900, 1600), rng.uniform(-0.15, -0.07), rng.uniform(500, 1200)
-        eps = float(np.exp(rng.normal(0, EPS_SIG)))
+        if variant == "wide":   # domain-randomised pretraining set: notched-component exponents, larger scatter
+            b = rng.uniform(-0.22, -0.07)
+        eps = float(np.exp(rng.normal(0, EPS_WIDE if variant == "wide" else EPS_SIG)))
         L_target = float(np.exp(rng.uniform(np.log(40), np.log(250))))
         ntype = int(rng.integers(2, 5)) if cfg["nonstat"] else 1
         regs = [new_regime(cfg, rng, kurt_range, su) for _ in range(ntype)]
@@ -166,7 +167,7 @@ if __name__ == "__main__":
         trajs = p.map(simulate, [(scen, sd, variant) for sd in seeds], chunksize=4)
     trajs = [t for t in trajs if t["K_f"] is not None]
     tag = f"{scen}_{split}" + ("" if variant == "base" else f"_{variant}")
-    with open(f"{ROOT}/data/{tag}.pkl", "wb") as f:
+    with open(f"/home/claude/paper/data/{tag}.pkl", "wb") as f:
         pickle.dump(trajs, f)
     life = np.array([t["K_f"] for t in trajs])
     print(tag, len(trajs), "life blocks: median %.1f  [%.1f, %.1f]" % (np.median(life), life.min(), life.max()), flush=True)
