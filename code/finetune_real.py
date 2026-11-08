@@ -17,6 +17,7 @@ p.add_argument("--ft_epochs", type=int, default=100); p.add_argument("--ft_lr", 
 p.add_argument("--no_inner", action="store_true")
 p.add_argument("--k", type=int, default=0, help="fine-tune on only k random specimens of the other groups (0 = all)")
 p.add_argument("--methods", default="")
+p.add_argument("--crack", action="store_true", help="add the crack length measured so far as a real-time input")
 a = p.parse_args()
 torch.manual_seed(a.seed)
 D = "/home/claude/paper/data/"
@@ -39,6 +40,36 @@ for j in np.unique(idx):
     else:
         for f in np.arange(0.05, 0.951, 0.05): keep[m[np.argmin(np.abs(c["tt"][m] - f * c["Kf"][m][0]))]] = True
 R = (Ste[0][keep], {k: v[keep] for k, v in c.items()}, idx[keep])
+TAG = "_crack" if a.crack else ""
+if a.crack:
+    import sys; sys.path.insert(0, "/home/claude/paper/realdata")
+    from crack_obs import crack_records
+    rec = crack_records(); tid = [t["id"] for t in te]
+    Ll = np.zeros(len(R[2]))
+    for r in range(len(R[2])):
+        n, L = rec.get(tid[R[2][r]], (np.zeros(0), np.zeros(0)))
+        seen = n <= R[1]["tt"][r] + 1e-9
+        Ll[r] = L[seen][-1] if seen.any() else 0.0           # last inspection so far (causal), 0 = no crack detected
+    cf = np.column_stack([np.log1p(Ll), (Ll > 0).astype(float)])
+    R = (np.hstack([R[0], cf]), R[1], R[2])
+    Str = (np.hstack([Str[0], np.zeros((len(Str[0]), 2))]), Str[1], Str[2])
+    Sva = (np.hstack([Sva[0], np.zeros((len(Sva[0]), 2))]), Sva[1], Sva[2])
+    print("crack observed at %.0f%% of evaluation points" % (100 * (Ll > 0).mean()), flush=True)
+
+
+def _fix_scaler(M):
+    if a.crack:
+        s_ = M.sc.s.copy(); m_ = M.sc.m.copy()
+        for j in (-2, -1):
+            if s_[j] < 1e-6: s_[j], m_[j] = 1.0, 0.0
+        M.sc.s, M.sc.m = s_, m_
+    return M
+
+
+class PIBNNc(Mo.PIBNN):
+    def _inp(self, X):
+        if a.crack: return np.hstack([Mo.dimensionless(X[:, :-2]), X[:, -2:]])
+        return Mo.dimensionless(X)
 ids = [t["id"] for t in te]
 G = np.array([ids[i][0] + ids[i][1] for i in R[2]])          # history x steel group of each row
 GROUPS = sorted(set(G))
@@ -93,14 +124,14 @@ class MinerCal:
 
 # pretrained (simulation) models for this seed
 t0 = time.time()
-PRE = {"mlp": Mo.DeepEnsembleMLP(epochs=EP).fit(Str, Sva, a.seed), "pibnn": Mo.PIBNN(epochs=EP).fit(Str, Sva, a.seed)}
+PRE = {"mlp": _fix_scaler(Mo.DeepEnsembleMLP(epochs=EP).fit(Str, Sva, a.seed)), "pibnn": _fix_scaler(PIBNNc(epochs=EP).fit(Str, Sva, a.seed))}
 print(f"pretrained on {a.pre} in {time.time() - t0:.0f}s", flush=True)
 
 METHODS = {
     "Miner-RT, recalibrated on real": lambda S: MinerCal().fit(S),
     "ANN+GPR, trained on real": lambda S: Mo.Farid2022().fit(S, S, a.seed),
     "Deep ens. MLP, trained on real": lambda S: Mo.DeepEnsembleMLP(epochs=150).fit(S, S, a.seed),
-    "PI-BNN, trained on real": lambda S: Mo.PIBNN(epochs=150).fit(S, S, a.seed),
+    "PI-BNN, trained on real": lambda S: PIBNNc(epochs=150).fit(S, S, a.seed),
     "Deep ens. MLP, fine-tuned": lambda S: ft_mlp(PRE["mlp"], S),
     "PI-BNN, fine-tuned": lambda S: ft_pibnn(PRE["pibnn"], S),
 }
@@ -147,7 +178,7 @@ for name in [m for m in METHODS if not a.methods or any(x in m for x in a.method
     out[name] = r; out[name + " + CP"] = rc
     print(f"{name:34s} CRPS {r['CRPS']:.3f} MALE {r['MALE']:.3f} PICP {r['PICP90']:.2f} MPIW {r['MPIW90']:.2f} | CP: CRPS {rc['CRPS']:.3f} PICP {rc['PICP90']:.2f} MPIW {rc['MPIW90']:.2f} lam {rc['lambda']:.2f} ({time.time() - t0:.0f}s)", flush=True)
     pickle.dump(dict(pt=pt.astype(np.float32), s=S_.astype(np.float32), scp=Scp.astype(np.float32)),
-                open(f"/home/claude/paper/results/ftpred_{a.pre}_k{a.k}_s{a.seed}_{name.split(',')[0].replace(' ', '').replace('.', '').replace('+', '')}_{name.split(', ')[1].replace(' ', '')}.pkl", "wb"))
+                open(f"/home/claude/paper/results/ftpred{TAG}_{a.pre}_k{a.k}_s{a.seed}_{name.split(',')[0].replace(' ', '').replace('.', '').replace('+', '')}_{name.split(', ')[1].replace(' ', '')}.pkl", "wb"))
 json.dump(dict(pre=a.pre, seed=a.seed, ft_epochs=a.ft_epochs, ft_lr=a.ft_lr, results=out,
                c={k: R[1][k].tolist() for k in ["rul", "Kf", "tt"]}, groups=G.tolist(), idx=R[2].tolist()),
-          open(f"/home/claude/paper/results/FT_{a.pre}_k{a.k}_s{a.seed}.json", "w"))
+          open(f"/home/claude/paper/results/FT{TAG}_{a.pre}_k{a.k}_s{a.seed}.json", "w"))

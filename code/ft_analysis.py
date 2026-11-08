@@ -83,7 +83,9 @@ def make_outputs(pre_main="S4", pre_alt="S4_wide"):
     entries = [("PI-BNN, fine-tuned", d, "\\textbf{PI-BNN}, S4 + adapted"), ("Deep ens. MLP, fine-tuned", d, "MLP, S4 + adapted"),
                ("PI-BNN, fine-tuned", w, "PI-BNN, wide + adapted"), ("Deep ens. MLP, fine-tuned", w, "MLP, wide + adapted"),
                ("PI-BNN, trained on real", d, "PI-BNN, real only"), ("Deep ens. MLP, trained on real", d, "MLP, real only"),
-               ("ANN+GPR, trained on real", d, "ANN+GPR \\cite{farid2022}, real only"), ("Miner-RT, recalibrated on real", d, "Miner-RT, recalibrated")]
+               ("ANN+GPR, trained on real", d, "ANN+GPR \\cite{farid2022}, real only"), ("Miner-RT, recalibrated on real", d, "Miner-RT, recalibrated"),
+               ("PI-BNN, fine-tuned", load("crack_S4"), "\\textbf{PI-BNN}, S4 + adapted + inspections"),
+               ("Deep ens. MLP, fine-tuned", load("crack_S4"), "MLP, S4 + adapted + inspections")]
     for m, dd, lab in entries:
         cells = []
         for k in KS:
@@ -125,4 +127,65 @@ Model & 3 & 5 & 10 & 20 & all & all \\
                 mac[f"ft{key}{kk}Sd"] = f"{stat(dd[(m, k)], 'CRPS')[1]:.2f}"
     with open(OUT + "numbers_ft.tex", "w") as f:
         for k, v in mac.items(): f.write(f"\\newcommand{{\\{k}}}{{{v}}}\n")
+    return mac
+
+
+def crack_outputs():
+    """Adds the crack-inspection (real-time health data) variant: macros, a real-time figure."""
+    import pickle, sys
+    sys.path.insert(0, "/home/claude/paper/realdata")
+    from crack_obs import crack_records
+    d = load("crack_S4")
+    base = load("S4")
+    mac = {}
+    for m, key in [("PI-BNN, fine-tuned", "Pcr"), ("Deep ens. MLP, fine-tuned", "Mcr")]:
+        for k, kk in [(3, "Three"), (5, "Five"), (10, "Ten"), (20, "Twenty"), (0, "All")]:
+            if (m, k) in d:
+                mac[f"ft{key}{kk}"] = f"{stat(d[(m, k)], 'CRPS')[0]:.2f}"
+                mac[f"ft{key}{kk}Cov"] = f"{stat(d[(m + ' + CP', k)], 'PICP90')[0]:.2f}"
+    # CRPS after crack detection vs before, all tests, seed-averaged (from prediction files)
+    import metrics as Me
+    rec = crack_records()
+    ids = pickle.load(open(R + "pred_REAL_S4_s0.pkl", "rb"))["ids"]
+    res = {}
+    for tag, lab in [("", "load"), ("_crack", "crack")]:
+        vals = {"pre": [], "post": []}
+        for s in range(5):
+            J = json.load(open(R + f"FT{tag}_S4_k0_s{s}.json"))
+            idx = np.array(J["idx"]); tt = np.array(J["c"]["tt"]); rul = np.array(J["c"]["rul"])
+            P = pickle.load(open(R + f"ftpred{tag}_S4_k0_s{s}_PI-BNN_fine-tuned.pkl", "rb"))
+            det = np.array([(rec[ids[i]][0] <= t + 1e-9).any() and rec[ids[i]][1][rec[ids[i]][0] <= t + 1e-9][-1] > 0
+                            for i, t in zip(idx, tt)])
+            cr = Me.crps_samples(np.log(P["scp"].astype(float)), np.log(rul))
+            vals["pre"].append(cr[~det].mean()); vals["post"].append(cr[det].mean())
+        res[lab] = {k: float(np.mean(v)) for k, v in vals.items()}
+    mac.update(crPreLoad=f"{res['load']['pre']:.2f}", crPostLoad=f"{res['load']['post']:.2f}",
+               crPreCrack=f"{res['crack']['pre']:.2f}", crPostCrack=f"{res['crack']['post']:.2f}")
+    with open(OUT + "numbers_crack.tex", "w") as f:
+        for k, v in mac.items(): f.write(f"\\newcommand{{\\{k}}}{{{v}}}\n")
+    # real-time figure: load-only vs load + inspections, with the inspection record
+    J = json.load(open(R + "FT_crack_S4_k0_s0.json"))
+    idx = np.array(J["idx"]); tt = np.array(J["c"]["tt"]); rul = np.array(J["c"]["rul"]); Kf = np.array(J["c"]["Kf"])
+    Pc = pickle.load(open(R + "ftpred_crack_S4_k0_s0_PI-BNN_fine-tuned.pkl", "rb"))
+    Pl = pickle.load(open(R + "ftpred_S4_k0_s0_PI-BNN_fine-tuned.pkl", "rb"))
+    show = ["SM3-2", "BM3-1", "TR2-2", "SR1-3"]
+    fig, axs = plt.subplots(1, 4, figsize=(7.1, 2.35))
+    for ax, sid in zip(axs, show):
+        j = ids.index(sid); m = idx == j; o = np.argsort(tt[m]); f = (tt[m] / Kf[m])[o]
+        ax.plot(f, rul[m][o], color="k", lw=1.1, label="true RUL")
+        lo, hi = np.quantile(Pc["scp"][m][o], [0.05, 0.95], 1)
+        ax.fill_between(f, lo, hi, color="#d62728", alpha=0.16, lw=0, label="90% PI, load + inspections")
+        ax.plot(f, Pc["pt"][m][o], color="#d62728", lw=1.1, label="PI-BNN, load + inspections")
+        ax.plot(f, Pl["pt"][m][o], color="#d62728", lw=0.8, ls="--", label="PI-BNN, load only")
+        ax.set_yscale("log"); ax.set_xlim(0, 1); ax.set_xlabel("life fraction")
+        ax.set_title(f"{sid}, $K_f$ = {Kf[m][0]:,.0f}", fontsize=7.2)
+        n, L = rec[sid]; ax2 = ax.twinx()
+        ax2.plot(n / Kf[m][0], L, "o", ms=1.8, color="#7570b3", label="inspected crack length")
+        ax2.set_ylim(0, 60); ax2.tick_params(labelsize=6, colors="#7570b3")
+        if sid == show[-1]: ax2.set_ylabel("crack length (mm)", color="#7570b3", fontsize=6.5)
+    axs[0].set_ylabel("RUL (blocks)")
+    h, l = axs[0].get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
+    fig.legend(h + h2, l + l2, fontsize=6, loc="upper center", ncol=5, bbox_to_anchor=(0.5, 1.02))
+    fig.tight_layout(w_pad=0.4, rect=(0, 0, 1, 0.9))
+    fig.savefig(OUT + "figs/fig_ft_examples.pdf"); fig.savefig("/home/claude/paper/figs/fig_ft_examples.png", dpi=300)
     return mac
