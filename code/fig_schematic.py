@@ -4,8 +4,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 import numpy as np
-import os as _os
-ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
 
 plt.rcParams.update({"font.family": "serif", "font.size": 8})
 fig, ax = plt.subplots(figsize=(7.4, 3.0))
@@ -49,5 +47,5 @@ x = np.linspace(0.01, 4, 200); y = np.exp(-(np.log(x) - 0.5) ** 2 / 0.3) / x; y 
 ax.fill_between(86 + 3 * x, 30, 30 + 7 * y, color="#9b59b6", alpha=0.4); ax.plot(86 + 3 * x, 30 + 7 * y, color="#6c3483", lw=0.8)
 ax.plot([86, 98], [30, 30], color="#444444", lw=0.5)
 ax.text(92, 5.5, "updated every block\n(real time)", ha="center", fontsize=6.5)
-plt.savefig(ROOT + "/figs/fig1_framework.pdf", bbox_inches="tight")
-plt.savefig(ROOT + "/figs/fig1_framework.png", dpi=200, bbox_inches="tight")
+plt.savefig("/home/claude/paper/figs/fig1_framework.pdf", bbox_inches="tight")
+plt.savefig("/home/claude/paper/figs/fig1_framework.png", dpi=200, bbox_inches="tight")

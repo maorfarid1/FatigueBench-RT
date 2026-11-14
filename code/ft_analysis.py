@@ -98,13 +98,13 @@ def make_outputs(pre_main="S4", pre_alt="S4_wide"):
     zero = f"PI-BNN, S4, no adaptation & \\multicolumn{{5}}{{c}}{{{zs['PI-BNN (proposed)']['CRPS'][0]:.2f}}} & {zs['PI-BNN (proposed) + CP(real)']['PICP90'][0]:.2f} \\\\\nMLP, S4, no adaptation & \\multicolumn{{5}}{{c}}{{{zs['Deep ensemble MLP']['CRPS'][0]:.2f}}} & {zs['Deep ensemble MLP + CP(real)']['PICP90'][0]:.2f} \\\\"
     tab = r"""\begin{table}[!htbp]
 \centering
-\caption{Adaptation to the SAE keyhole tests: CRPS of log RUL against the number $k$ of real tests used, leave-one-group-out (each history and steel group is predicted by a model that saw only tests of the other five groups; ``all'' is about 39 tests). Mean over 5 seeds. The last column is the 90\% coverage with all tests, after cross-conformal scaling estimated within the training groups. ``S4'' and ``wide'': pretraining on the benchmark scenario S4 and on its domain-randomized variant. Rows without adaptation: CRPS as in Table~\ref{tab:real}, coverage after its leave-one-group-out conformal scaling.}
+\caption{Adaptation to the SAE keyhole tests: CRPS of log RUL against the number $n_{\mathrm{t}}$ of real tests used, leave-one-group-out (each history and steel group is predicted by a model that saw only tests of the other five groups; ``all'' is about 39 tests). Mean over 5 seeds. The last column is the 90\% coverage with all tests, after cross-conformal scaling estimated within the training groups. ``S4'' and ``wide'': pretraining on the benchmark scenario S4 and on its domain-randomized variant. ``+ inspections'': the crack length measured so far is an additional real-time input. Rows without adaptation: CRPS as in Table~\ref{tab:real}, coverage after its leave-one-group-out conformal scaling.}
 \label{tab:ft}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{lcccccc}
 \toprule
- & \multicolumn{5}{c}{CRPS with $k$ real tests} & PICP90 \\
+ & \multicolumn{5}{c}{CRPS with $n_{\mathrm{t}}$ real tests} & PICP90 \\
 \cmidrule(lr){2-6}
 Model & 3 & 5 & 10 & 20 & all & all \\
 \midrule

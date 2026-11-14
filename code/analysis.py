@@ -3,11 +3,9 @@ import pickle, copy, json, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import features as F, models as Mo
-import os as _os
-ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
 
 plt.rcParams.update({"font.family": "serif", "font.size": 7.5, "axes.linewidth": 0.6, "legend.frameon": False})
-D = ROOT + "/data/"
+D = "/home/claude/paper/data/"
 ld = lambda n: pickle.load(open(D + n + ".pkl", "rb"))
 tr, va, te = ld("S3_train"), ld("S3_val"), ld("S3_test")
 
@@ -86,8 +84,8 @@ for j, name in enumerate(["PI-BNN (proposed)", "Deep ensemble MLP"]):
     ax.set_xlabel("life fraction $t/K_f$"); ax.set_ylabel("predicted RUL$/K_f$"); ax.set_ylim(0, 2.0)
     ax.set_title("(b) PI-BNN, time dilation" if j == 0 else "(c) deep ens. MLP, time dilation")
     if j == 0: ax.legend(fontsize=5.8)
-plt.tight_layout(); plt.savefig(ROOT + "/figs/fig9_uq_equivariance.pdf"); plt.savefig(ROOT + "/figs/fig9_uq_equivariance.png", dpi=200)
+plt.tight_layout(); plt.savefig("/home/claude/paper/figs/fig9_uq_equivariance.pdf"); plt.savefig("/home/claude/paper/figs/fig9_uq_equivariance.png", dpi=200)
 json.dump(dict(decomp=dict(frac=[float(v) for v in xs], aleaD=[float(v) for v in aD], alear=[float(v) for v in ar], epi=[float(v) for v in ep]), dilation_MALE=ratios),
-          open(ROOT + "/results/analysis.json", "w"), indent=1)
+          open("/home/claude/paper/results/analysis.json", "w"), indent=1)
 print(json.dumps(ratios, indent=1))
 print("decomp", [round(v, 3) for v in aD], [round(v, 3) for v in ar], [round(v, 4) for v in ep])

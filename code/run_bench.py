@@ -4,8 +4,6 @@ python run_bench.py <scen> [--ntrain N] [--seed S] [--methods a,b] [--test_varia
 """
 import argparse, json, pickle, time, numpy as np
 import features as F, models as Mo, metrics as Me
-import os as _os
-ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
 
 p = argparse.ArgumentParser()
 p.add_argument("scen"); p.add_argument("--ntrain", type=int, default=0); p.add_argument("--seed", type=int, default=0)
@@ -13,7 +11,7 @@ p.add_argument("--methods", default="miner,dirlik,farid,mlp,lstm,pibnn")
 p.add_argument("--test_variants", default="base"); p.add_argument("--split", default="iid"); p.add_argument("--tag", default=""); p.add_argument("--save_pred", action="store_true")
 a = p.parse_args()
 
-D = ROOT + "/data/"
+D = "/home/claude/paper/data/"
 ld = lambda n: pickle.load(open(D + n + ".pkl", "rb"))
 tr, va = ld(f"{a.scen}_train"), ld(f"{a.scen}_val")
 tvs = a.test_variants.split(",")
@@ -73,9 +71,9 @@ for m in a.methods.split(","):
         print(f"[{v}] {M.name:36s} NRMSE {r['NRMSE']:.4f} MALE {r['MALE']:.3f} a-l {r['alpha_lambda']:.3f} PICP {r['PICP90']:.3f} MPIW {r['MPIW90']:.3f} CRPS {r['CRPS']:.4f} ECE {r['ECE']:.3f} PH {r['PH']:.3f} ({ttrain:.0f}s)" + (f" | CP: PICP {rr['PICP90']:.3f} MPIW {rr['MPIW90']:.3f} CRPS {rr['CRPS']:.4f}" if m not in ("miner","dirlik") else ""), flush=True)
 
 tag = a.tag or f"{a.scen}_{a.split}_n{ntr}_s{a.seed}"
-json.dump(dict(scen=a.scen, split=a.split, ntest={v: len(t) for v, t in tes.items()}, ntrain=ntr, seed=a.seed, epochs=EP, results=res), open(f"{ROOT}/results/{tag}.json", "w"), indent=1)
+json.dump(dict(scen=a.scen, split=a.split, ntest={v: len(t) for v, t in tes.items()}, ntrain=ntr, seed=a.seed, epochs=EP, results=res), open(f"/home/claude/paper/results/{tag}.json", "w"), indent=1)
 if a.save_pred:
     for v in tvs:
-        with open(f"{ROOT}/results/pred_{tag}_{v}.pkl", "wb") as f:
+        with open(f"/home/claude/paper/results/pred_{tag}_{v}.pkl", "wb") as f:
             pickle.dump(dict(preds={k: (q[0].astype(np.float32), q[1].astype(np.float32)) for k, q in preds[v].items()},
                              c={k: Stes[v][1][k] for k in ["rul", "Kf", "tt", "D", "D_dk"]}, idx=Stes[v][2]), f)

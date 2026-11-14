@@ -3,13 +3,11 @@ import json, glob, pickle, re, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import metrics as Me
-import os as _os
-ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
 
 plt.rcParams.update({"font.family": "serif", "font.size": 7.5, "axes.linewidth": 0.6, "legend.frameon": False})
-R = ROOT + "/results/"
-OUT = ROOT + "/tex/"
-F = ROOT + "/figs/"
+R = "/home/claude/paper/results/"
+OUT = "/home/claude/paper/tex/"
+F = "/home/claude/paper/figs/"
 METHODS = ["Miner-RT (rainflow)", "Dirlik-RT (spectral)", "ANN+GPR (Farid 2022)", "ANN+GPR (Farid 2022) + CP",
            "Deep ensemble MLP", "Deep ensemble MLP + CP", "Deep ensemble LSTM", "Deep ensemble LSTM + CP",
            "PI-BNN (proposed)", "PI-BNN (proposed) + CP"]
@@ -89,7 +87,7 @@ def numbers():
     """Write LaTeX macros with the headline numbers used in the text."""
     st = json.load(open(R + "data_stats.json"))
     import pickle as _p
-    n_extra = sum(len(_p.load(open(f"{ROOT}/data/S3_test_{v}.pkl", "rb"))) for v in ["sae", "ood_kurt"])
+    n_extra = sum(len(_p.load(open(f"/home/claude/paper/data/S3_test_{v}.pkl", "rb"))) for v in ["sae", "ood_kurt"])
     ntraj = sum(st[s]["n"] for s in st) + n_extra
     nblk = sum(st[s]["nblk"] for s in st)
     mac = {"NTRAJ": f"{ntraj:,}", "NBLK": f"{nblk:,}"}
