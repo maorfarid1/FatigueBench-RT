@@ -5,6 +5,7 @@ authors:
   - family-names: Farid
     given-names: Maor
     affiliation: "Leo AI, Inc."
+doi: "10.5281/zenodo.24210453"
 repository-code: "https://github.com/leoai-org/FatigueBench-RT"
 license: MIT
 preferred-citation:
