@@ -3,10 +3,12 @@ import pickle, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import gen, fatigue_physics as fp
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
 
 plt.rcParams.update({"font.family": "serif", "font.size": 7.5, "axes.linewidth": 0.6, "xtick.major.width": 0.6,
                      "ytick.major.width": 0.6, "legend.frameon": False})
-D = "/home/claude/paper/data/"
+D = ROOT + "/data/"
 SC = ["S1", "S2", "S3", "S4"]
 TITLE = {"S1": "S1 stationary Gaussian", "S2": "S2 mission mix", "S3": "S3 + non-Gaussian", "S4": "S4 + drift, sequence"}
 COL = {"S1": "#1b6ca8", "S2": "#2a9d8f", "S3": "#e9a03b", "S4": "#c8553d"}
@@ -55,7 +57,7 @@ for j, sc in enumerate(SC):
     if j == 0:
         ax.set_ylabel("cumulative damage"); ax.legend(loc="upper left", fontsize=6)
 plt.tight_layout()
-plt.savefig("/home/claude/paper/figs/fig2_scenarios.pdf"); plt.savefig("/home/claude/paper/figs/fig2_scenarios.png", dpi=200)
+plt.savefig(ROOT + "/figs/fig2_scenarios.pdf"); plt.savefig(ROOT + "/figs/fig2_scenarios.png", dpi=200)
 
 # ---- Fig 3 statistics
 fig, axs = plt.subplots(1, 3, figsize=(7.2, 2.2))
@@ -78,11 +80,11 @@ axs[1].axhline(1, color="0.5", lw=0.6, ls="--"); axs[1].set_yscale("log"); axs[1
 axs[2].boxplot([stats[sc]["ratio"] for sc in SC], tick_labels=SC, showfliers=False, widths=0.5)
 axs[2].axhline(0, color="0.5", lw=0.6, ls="--"); axs[2].set_ylabel("$\\log_{10}$(Dirlik / rainflow damage)")
 plt.tight_layout()
-plt.savefig("/home/claude/paper/figs/fig3_stats.pdf"); plt.savefig("/home/claude/paper/figs/fig3_stats.png", dpi=200)
+plt.savefig(ROOT + "/figs/fig3_stats.pdf"); plt.savefig(ROOT + "/figs/fig3_stats.png", dpi=200)
 import json
 json.dump({sc: dict(n=stats[sc]["n"], nblk=stats[sc]["nblk"], life_med=float(np.median(stats[sc]["life"])),
                     life_p5=float(np.percentile(stats[sc]["life"], 5)), life_p95=float(np.percentile(stats[sc]["life"], 95)),
                     ms_med=float(np.median(stats[sc]["ms"])), ms_p5=float(np.percentile(stats[sc]["ms"], 5)),
                     ms_p95=float(np.percentile(stats[sc]["ms"], 95)), ratio_med=float(10 ** np.median(stats[sc]["ratio"])))
-           for sc in SC}, open("/home/claude/paper/results/data_stats.json", "w"), indent=1)
-print(open("/home/claude/paper/results/data_stats.json").read())
+           for sc in SC}, open(ROOT + "/results/data_stats.json", "w"), indent=1)
+print(open(ROOT + "/results/data_stats.json").read())
