@@ -1,10 +1,13 @@
 """Summaries for the SAE keyhole real-data test: seed-averaged metrics, leave-one-group-out conformal
 recalibration on the real tests, and a replicate-scatter reference."""
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
+for _d in ("tex/figs", "figs", "results", "data"): _os.makedirs(_os.path.join(ROOT, _d), exist_ok=True)
 import json, pickle, numpy as np
 from scipy.stats import norm
 import metrics as Me
 
-R = "/home/claude/paper/results/"
+R = ROOT + "/results/"
 SEEDS = [0, 1, 2]
 
 
@@ -49,8 +52,8 @@ def main():
         if "lambda_mean" in v[0]:
             summ[n]["lambda"] = float(np.mean([r["lambda_mean"] for r in v]))
     # total-life accuracy of the CA-calibrated Miner model and replicate scatter
-    mv = json.load(open("/home/claude/paper/realdata/miner_va.json"))
-    va = json.load(open("/home/claude/paper/realdata/keyhole_tests.json"))["va"]
+    mv = json.load(open(ROOT + "/realdata/miner_va.json"))
+    va = json.load(open(ROOT + "/realdata/keyhole_tests.json"))["va"]
     fail = [q for q in mv if not q["censored"]]
     lr = np.log10([q["K_f"] / q["K_miner"] for q in fail])
     lev = {}
@@ -59,12 +62,12 @@ def main():
             lev.setdefault((r["history"], r["mat"], r["level"]), []).append(np.log10(r["K_f"]))
     rep = [x - np.mean(v) for v in lev.values() if len(v) > 1 for x in v]
     nrep = [len(v) for v in lev.values() if len(v) > 1]
-    life = dict(n_fail=len(fail), n_ca=len(json.load(open("/home/claude/paper/realdata/keyhole_tests.json"))["ca"]),
+    life = dict(n_fail=len(fail), n_ca=len(json.load(open(ROOT + "/realdata/keyhole_tests.json"))["ca"]),
                 bias_log10=float(lr.mean()), sd_log10=float(lr.std(ddof=1)), within3=float(np.mean(np.abs(lr) < np.log10(3))),
                 within2=float(np.mean(np.abs(lr) < np.log10(2))),
                 rep_sd_log10=float(np.sqrt(np.sum(np.square(rep)) / (len(rep) - len(nrep)))),
                 life_min=float(min(q["K_f"] for q in fail)), life_max=float(max(q["K_f"] for q in fail)))
-    cal = json.load(open("/home/claude/paper/realdata/calib.json"))
+    cal = json.load(open(ROOT + "/realdata/calib.json"))
     life["calib"] = {m: dict(c=v["c"], b=v["b"], rms_log10=v["rms_log"] / np.log(10), n=v["n"]) for m, v in cal.items()}
     json.dump(dict(methods=summ, life=life), open(R + "real_summary.json", "w"), indent=1)
     for n, v in summ.items():

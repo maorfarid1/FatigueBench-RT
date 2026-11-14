@@ -1,11 +1,14 @@
 """Real-time RUL predictions on three held-out keyhole tests: zero-shot vs adapted PI-BNN, adapted MLP."""
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
+for _d in ("tex/figs", "figs", "results", "data"): _os.makedirs(_os.path.join(ROOT, _d), exist_ok=True)
 import json, pickle, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 plt.rcParams.update({"font.family": "serif", "font.size": 7.5, "axes.linewidth": 0.6, "legend.frameon": False,
                      "pdf.fonttype": 42, "mathtext.fontset": "cm"})
-R = "/home/claude/paper/results/"
+R = ROOT + "/results/"
 PRE, SEED = "S4", 0
 J = json.load(open(R + f"FT_{PRE}_k0_s{SEED}.json"))
 idx = np.array(J["idx"]); rul = np.array(J["c"]["rul"]); Kf = np.array(J["c"]["Kf"]); tt = np.array(J["c"]["tt"])
@@ -30,5 +33,5 @@ axs[0].set_ylabel("RUL (blocks)")
 h, l = axs[0].get_legend_handles_labels()
 fig.legend(h, l, fontsize=6, loc="upper center", ncol=5, bbox_to_anchor=(0.5, 1.02))
 fig.tight_layout(w_pad=0.5, rect=(0, 0, 1, 0.9))
-fig.savefig("/home/claude/paper/tex/figs/fig_ft_examples.pdf"); fig.savefig("/home/claude/paper/figs/fig_ft_examples.png", dpi=300)
+fig.savefig(ROOT + "/tex/figs/fig_ft_examples.pdf"); fig.savefig(ROOT + "/figs/fig_ft_examples.png", dpi=300)
 print("ok")

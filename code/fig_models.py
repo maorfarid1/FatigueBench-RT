@@ -1,5 +1,8 @@
 """Illustrations of the benchmark ingredients (Hermite model, spectra, S-N/Goodman, damage curve approach,
 drift) and of the PI-BNN rate correction."""
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
+for _d in ("tex/figs", "figs", "results", "data"): _os.makedirs(_os.path.join(ROOT, _d), exist_ok=True)
 import numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -8,7 +11,7 @@ from scipy.stats import norm
 
 plt.rcParams.update({"font.family": "serif", "font.size": 7.5, "axes.linewidth": 0.6, "legend.frameon": False,
                      "pdf.fonttype": 42, "mathtext.fontset": "cm"})
-OUT = "/home/claude/paper/tex/figs/"; PNG = "/home/claude/paper/figs/"
+OUT = ROOT + "/tex/figs/"; PNG = ROOT + "/figs/"
 C = plt.cm.viridis(np.linspace(0.05, 0.85, 4))
 
 fig, axs = plt.subplots(2, 3, figsize=(7.1, 4.3))

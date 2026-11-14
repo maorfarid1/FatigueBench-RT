@@ -7,6 +7,9 @@ training groups only.
 
 python finetune_real.py --pre S4 --seed 0          (pretraining set S4 or S4_wide)
 """
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
+for _d in ("tex/figs", "figs", "results", "data"): _os.makedirs(_os.path.join(ROOT, _d), exist_ok=True)
 import argparse, copy, json, pickle, time, numpy as np, torch
 import features as F, models as Mo, metrics as Me
 from scipy.stats import norm
@@ -20,7 +23,7 @@ p.add_argument("--methods", default="")
 p.add_argument("--crack", action="store_true", help="add the crack length measured so far as a real-time input")
 a = p.parse_args()
 torch.manual_seed(a.seed)
-D = "/home/claude/paper/data/"
+D = ROOT + "/data/"
 ld = lambda n: pickle.load(open(D + n + ".pkl", "rb"))
 sfx = "_wide" if a.pre.endswith("_wide") else ""
 tr, va, te = ld(f"S4_train{sfx}"), ld(f"S4_val{sfx}"), ld("REAL_keyhole")
@@ -42,7 +45,7 @@ for j in np.unique(idx):
 R = (Ste[0][keep], {k: v[keep] for k, v in c.items()}, idx[keep])
 TAG = "_crack" if a.crack else ""
 if a.crack:
-    import sys; sys.path.insert(0, "/home/claude/paper/realdata")
+    import sys; sys.path.insert(0, ROOT + "/realdata")
     from crack_obs import crack_records
     rec = crack_records(); tid = [t["id"] for t in te]
     Ll = np.zeros(len(R[2]))
@@ -178,7 +181,7 @@ for name in [m for m in METHODS if not a.methods or any(x in m for x in a.method
     out[name] = r; out[name + " + CP"] = rc
     print(f"{name:34s} CRPS {r['CRPS']:.3f} MALE {r['MALE']:.3f} PICP {r['PICP90']:.2f} MPIW {r['MPIW90']:.2f} | CP: CRPS {rc['CRPS']:.3f} PICP {rc['PICP90']:.2f} MPIW {rc['MPIW90']:.2f} lam {rc['lambda']:.2f} ({time.time() - t0:.0f}s)", flush=True)
     pickle.dump(dict(pt=pt.astype(np.float32), s=S_.astype(np.float32), scp=Scp.astype(np.float32)),
-                open(f"/home/claude/paper/results/ftpred{TAG}_{a.pre}_k{a.k}_s{a.seed}_{name.split(',')[0].replace(' ', '').replace('.', '').replace('+', '')}_{name.split(', ')[1].replace(' ', '')}.pkl", "wb"))
+                open(f"{ROOT}/results/ftpred{TAG}_{a.pre}_k{a.k}_s{a.seed}_{name.split(',')[0].replace(' ', '').replace('.', '').replace('+', '')}_{name.split(', ')[1].replace(' ', '')}.pkl", "wb"))
 json.dump(dict(pre=a.pre, seed=a.seed, ft_epochs=a.ft_epochs, ft_lr=a.ft_lr, results=out,
                c={k: R[1][k].tolist() for k in ["rul", "Kf", "tt"]}, groups=G.tolist(), idx=R[2].tolist()),
-          open(f"/home/claude/paper/results/FT{TAG}_{a.pre}_k{a.k}_s{a.seed}.json", "w"))
+          open(f"{ROOT}/results/FT{TAG}_{a.pre}_k{a.k}_s{a.seed}.json", "w"))

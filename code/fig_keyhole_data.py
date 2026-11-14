@@ -1,9 +1,12 @@
 """Figure: the SAE keyhole real-data test set (measured histories, their rainflow spectra, crack growth)."""
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
+for _d in ("tex/figs", "figs", "results", "data"): _os.makedirs(_os.path.join(ROOT, _d), exist_ok=True)
 import sys, json, numpy as np, pandas as pd, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-sys.path.insert(0, "/home/claude/paper/realdata")
-import os; os.chdir("/home/claude/paper/realdata")
+sys.path.insert(0, ROOT + "/realdata")
+import os; os.chdir(ROOT + "/realdata")
 from parse_keyhole import history, tables
 import fatigue_physics as fp
 
@@ -44,5 +47,5 @@ ax.axhline(2.54, color="0.4", ls=":", lw=0.6); ax.text(0.02, 3.5, "initiation, 2
 ax.set_xlim(0, 1.02); ax.set_ylim(0, 55); ax.set_xlabel("life fraction $n/K_f$"); ax.set_ylabel("crack length (mm)")
 ax.set_title("(c) crack growth to fracture", fontsize=7.5)
 fig.tight_layout(w_pad=0.6)
-fig.savefig("/home/claude/paper/tex/figs/fig_keyhole_data.pdf"); fig.savefig("/home/claude/paper/figs/fig_keyhole_data.png", dpi=300)
+fig.savefig(ROOT + "/tex/figs/fig_keyhole_data.pdf"); fig.savefig(ROOT + "/figs/fig_keyhole_data.png", dpi=300)
 print("ok")

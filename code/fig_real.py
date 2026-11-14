@@ -1,4 +1,7 @@
 """Figure, table and LaTeX macros for the SAE keyhole real-data test."""
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
+for _d in ("tex/figs", "figs", "results", "data"): _os.makedirs(_os.path.join(ROOT, _d), exist_ok=True)
 import json, pickle, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -6,7 +9,7 @@ from fig_results import COL, LAB, SHORT
 from real_analysis import cross_conformal, groups
 
 plt.rcParams.update({"font.family": "serif", "font.size": 7.5, "axes.linewidth": 0.6, "legend.frameon": False})
-R = "/home/claude/paper/results/"; RD = "/home/claude/paper/realdata/"; OUT = "/home/claude/paper/tex/"
+R = ROOT + "/results/"; RD = ROOT + "/realdata/"; OUT = ROOT + "/tex/"
 S = json.load(open(R + "real_summary.json"))
 mv = json.load(open(RD + "miner_va.json")); ls = json.load(open(RD + "local_strain_va.json"))
 va = {r["id"]: r for r in json.load(open(RD + "keyhole_tests.json"))["va"]}
@@ -69,7 +72,7 @@ ax.set_xlabel("test life (blocks)"); ax.set_ylabel("mean error of log RUL")
 ax.legend(fontsize=5.6, loc="lower left", borderaxespad=0.2, labelspacing=0.25)
 ax.set_title("(c) bias vs life scale", fontsize=7.5)
 fig.tight_layout(w_pad=0.8)
-fig.savefig(OUT + "figs/fig10_real.pdf"); fig.savefig("/home/claude/paper/figs/fig10_real.png", dpi=400)
+fig.savefig(OUT + "figs/fig10_real.pdf"); fig.savefig(ROOT + "/figs/fig10_real.png", dpi=400)
 
 # bias table numbers for the text
 bias = {}

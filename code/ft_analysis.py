@@ -1,11 +1,14 @@
 """Aggregate the fine-tuning (few-shot transfer) runs on the SAE keyhole tests: table, figure, macros."""
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
+for _d in ("tex/figs", "figs", "results", "data"): _os.makedirs(_os.path.join(ROOT, _d), exist_ok=True)
 import glob, json, re, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 plt.rcParams.update({"font.family": "serif", "font.size": 7.5, "axes.linewidth": 0.6, "legend.frameon": False,
                      "pdf.fonttype": 42})
-R = "/home/claude/paper/results/"; OUT = "/home/claude/paper/tex/"
+R = ROOT + "/results/"; OUT = ROOT + "/tex/"
 KS = [3, 5, 10, 20, 0]
 METH = ["Miner-RT, recalibrated on real", "ANN+GPR, trained on real", "Deep ens. MLP, trained on real",
         "PI-BNN, trained on real", "Deep ens. MLP, fine-tuned", "PI-BNN, fine-tuned"]
@@ -78,7 +81,7 @@ def make_outputs(pre_main="S4", pre_alt="S4_wide"):
     axs[2].set_yscale("log"); axs[2].set_yticks([5, 10, 20, 40]); axs[2].set_yticklabels(["5", "10", "20", "40"]); axs[2].minorticks_off(); axs[2].set_ylabel("MPIW90 (log RUL)"); axs[2].set_title("(c) interval width", fontsize=7.5)
     axs[0].legend(fontsize=5.2, loc="upper right", labelspacing=0.15)
     fig.tight_layout(w_pad=0.6)
-    fig.savefig(OUT + "figs/fig_finetune.pdf"); fig.savefig("/home/claude/paper/figs/fig_finetune.png", dpi=300)
+    fig.savefig(OUT + "figs/fig_finetune.pdf"); fig.savefig(ROOT + "/figs/fig_finetune.png", dpi=300)
     rows = []
     entries = [("PI-BNN, fine-tuned", d, "\\textbf{PI-BNN}, S4 + adapted"), ("Deep ens. MLP, fine-tuned", d, "MLP, S4 + adapted"),
                ("PI-BNN, fine-tuned", w, "PI-BNN, wide + adapted"), ("Deep ens. MLP, fine-tuned", w, "MLP, wide + adapted"),
@@ -133,7 +136,7 @@ Model & 3 & 5 & 10 & 20 & all & all \\
 def crack_outputs():
     """Adds the crack-inspection (real-time health data) variant: macros, a real-time figure."""
     import pickle, sys
-    sys.path.insert(0, "/home/claude/paper/realdata")
+    sys.path.insert(0, ROOT + "/realdata")
     from crack_obs import crack_records
     d = load("crack_S4")
     base = load("S4")
@@ -187,5 +190,5 @@ def crack_outputs():
     h, l = axs[0].get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
     fig.legend(h + h2, l + l2, fontsize=6, loc="upper center", ncol=5, bbox_to_anchor=(0.5, 1.02))
     fig.tight_layout(w_pad=0.4, rect=(0, 0, 1, 0.9))
-    fig.savefig(OUT + "figs/fig_ft_examples.pdf"); fig.savefig("/home/claude/paper/figs/fig_ft_examples.png", dpi=300)
+    fig.savefig(OUT + "figs/fig_ft_examples.pdf"); fig.savefig(ROOT + "/figs/fig_ft_examples.png", dpi=300)
     return mac

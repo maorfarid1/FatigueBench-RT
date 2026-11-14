@@ -3,6 +3,9 @@ variable-amplitude run-to-failure tests (no real data used in training or calibr
 
 python run_real.py --train S4 --seed 0
 """
+import os as _os
+ROOT = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), ".."))
+for _d in ("tex/figs", "figs", "results", "data"): _os.makedirs(_os.path.join(ROOT, _d), exist_ok=True)
 import argparse, json, pickle, time, numpy as np
 import features as F, models as Mo, metrics as Me
 
@@ -10,7 +13,7 @@ p = argparse.ArgumentParser()
 p.add_argument("--train", default="S4"); p.add_argument("--seed", type=int, default=0)
 p.add_argument("--methods", default="miner,dirlik,farid,mlp,lstm,pibnn")
 a = p.parse_args()
-D = "/home/claude/paper/data/"
+D = ROOT + "/data/"
 ld = lambda n: pickle.load(open(D + n + ".pkl", "rb"))
 tr, va, te = ld(f"{a.train}_train"), ld(f"{a.train}_val"), ld("REAL_keyhole")
 rng = np.random.default_rng(a.seed)
@@ -62,8 +65,8 @@ for m in a.methods.split(","):
 
 tag = f"REAL_{a.train}_s{a.seed}"
 json.dump(dict(train=a.train, seed=a.seed, ntest=len(te), npts=int(keep.sum()), results=res),
-          open(f"/home/claude/paper/results/{tag}.json", "w"), indent=1)
-with open(f"/home/claude/paper/results/pred_{tag}.pkl", "wb") as f:
+          open(f"{ROOT}/results/{tag}.json", "w"), indent=1)
+with open(f"{ROOT}/results/pred_{tag}.pkl", "wb") as f:
     pickle.dump(dict(preds={k: (q[0].astype(np.float32), q[1].astype(np.float32)) for k, q in preds.items()},
                      c={k: Ste_s[1][k] for k in ["rul", "Kf", "tt", "D"]}, idx=Ste_s[2],
                      ids=[t["id"] for t in te]), f)
