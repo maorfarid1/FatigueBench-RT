@@ -32,7 +32,7 @@ def cdf_T(samples, t, grid):
 def interval(samples, t):
     lo, med, hi = np.quantile(samples, [0.05, 0.5, 0.95]); return t + lo, t + med, t + hi
 
-fig, axs = plt.subplots(2, 4, figsize=(7.1, 3.9), sharey="row")
+fig, axs = plt.subplots(2, 4, figsize=(7.1, 3.5), sharey="row")
 # ---- top row: S3 test component 2 (error at the median of the test set)
 P = pickle.load(open(R + "pred_S3_iid_n600_s0_base.pkl", "rb")); c = P["c"]; idx = np.asarray(P["idx"])
 S = np.asarray(P["preds"]["PI-BNN (proposed) + CP"][1]); J = 2
@@ -51,10 +51,8 @@ for a, fr, r in zip(axs[0], FR, rows):
     a2.axvline(Kf, color="k", ls="--", lw=0.7); a2.axvline(t, color="0.45", lw=0.6)
     a2.set_ylim(0, 1.08 * FMAX); a2.set_yticks([]); a2.set_xlim(0, xmax); a2.spines["top"].set_visible(False); a.spines["top"].set_visible(False)
     a.set_title(f"$t$ = {fr:.0%} of life", fontsize=7.5, pad=5)
-    a.set_xlabel("operating time (blocks)")
 axs[0][0].set_ylabel("measured stress (MPa)")
 axs[0][0].text(-0.36, 1.25, "", transform=axs[0][0].transAxes)
-axs[0][0].text(0.97, 0.80, f"S3 component\n$K_f$ = {Kf:.0f}", transform=axs[0][0].transAxes, fontsize=6, ha="right")
 # ---- bottom row: keyhole SM3-2 with crack inspections
 JJ = json.load(open(R + "FT_crack_S4_k0_s0.json")); cc = {k: np.array(v) for k, v in JJ["c"].items()}; ii = np.array(JJ["idx"])
 SS = pickle.load(open(R + "ftpred_crack_S4_k0_s0_PI-BNN_fine-tuned.pkl", "rb"))["scp"]
@@ -73,14 +71,12 @@ for a, fr in zip(axs[1], FR):
     a2.plot([Kk], [cdf_T(SS[r], t, np.array([Kk]))[0]], "o", ms=3.2, mfc="white", mec="k", mew=0.8)
     a2.set_ylim(0, 1.05); a2.set_yticks([0, 0.5, 1]); a2.set_xlim(0, xk); a2.spines["top"].set_visible(False); a.spines["top"].set_visible(False)
     a2.tick_params(axis="y", labelsize=6.5, colors=RED)
-    a.set_xlabel("operating time (passes)")
     if fr == FR[-1]: a2.set_ylabel("P(failure by $T$)", color=RED, fontsize=7)
 axs[1][0].set_ylabel("crack length (mm)")
-axs[1][0].text(0.04, 0.96, f"keyhole SM3-2\n$K_f$ = {Kk:,.0f}", transform=axs[1][0].transAxes, fontsize=6, ha="left", va="top")
 h = [plt.Line2D([], [], color=LOAD, lw=1, label="measured stress"), plt.Line2D([], [], color=CRK, marker="o", ls="", ms=3, label="crack inspections"),
      plt.Line2D([], [], color=RED, lw=1, label="PI-BNN prediction"), plt.Rectangle((0, 0), 1, 1, color=RED, alpha=0.25, lw=0, label="90% CI (CL = 90%)"),
      plt.Line2D([], [], color="0.45", lw=0.6, label="current time $t$"), plt.Line2D([], [], color="k", ls="--", lw=0.7, label="true failure time")]
 fig.legend(handles=h, loc="lower center", ncol=6, fontsize=6.3, bbox_to_anchor=(0.5, -0.005), columnspacing=1.2, handlelength=1.6)
-fig.tight_layout(rect=(0, 0.05, 1, 1), h_pad=0.6, w_pad=0.4)
+fig.tight_layout(rect=(0, 0.055, 1, 1), h_pad=1.0, w_pad=0.4)
 fig.savefig(ROOT / "tex/figs/fig_realtime_pdf.pdf"); fig.savefig(ROOT / "figs/fig_realtime_pdf.png", dpi=300)
 print("Kf S3", Kf, "Kf SM3-2", Kk)
