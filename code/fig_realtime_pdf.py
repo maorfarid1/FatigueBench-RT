@@ -62,25 +62,28 @@ JJ = json.load(open(R + "FT_crack_S4_k0_s0.json")); cc = {k: np.array(v) for k, 
 SS = pickle.load(open(R + "ftpred_crack_S4_k0_s0_PI-BNN_fine-tuned.pkl", "rb"))["scp"]
 te = pickle.load(open(D + "REAL_keyhole.pkl", "rb")); ids = [t["id"] for t in te]; JK = ids.index("SM3-2")
 mk = np.where(ii == JK)[0]; Kk = cc["Kf"][mk][0]; xk = 1.35 * Kk; gk = np.linspace(0, xk, 1500)
-nrec, Lrec = crack_records()["SM3-2"]
-for a, fr in zip(axs[1], FR):
-    r = mk[np.argmin(np.abs(cc["tt"][mk] - fr * Kk))]; t = cc["tt"][r]
-    seen = nrec <= t
-    a.plot(nrec[seen], Lrec[seen], "o", ms=2.2, color=CRK)
-    a2 = a.twinx(); F = cdf_T(SS[r], t, gk); lo, med, hi = interval(SS[r], t)
-    sel = (gk >= lo) & (gk <= hi); a2.fill_between(gk[sel], 0, F[sel], color=RED, alpha=0.18, lw=0)
-    a2.plot(gk, F, color=RED, lw=1.2)
-    pt = float(np.mean(np.asarray(SS[r]) < Kk - t))
-    a2.axvline(Kk, color="k", ls="--", lw=0.7); a2.axvline(t, color="0.45", lw=0.6)
-    a2.plot([Kk], [cdf_T(SS[r], t, np.array([Kk]))[0]], "o", ms=3.2, mfc="white", mec="k", mew=0.8)
-    a2.set_ylim(0, 1.05); a2.set_yticks([0, 0.5, 1]); a2.set_xlim(0, xk); a2.spines["top"].set_visible(False); a.spines["top"].set_visible(False)
-    a2.tick_params(axis="y", labelsize=6.5, colors=RED)
-    if fr == FR[-1]: a2.set_ylabel("P(failure by $T$)", color=RED, fontsize=7)
-axs[1][0].set_ylabel("crack length (mm)")
-h = [plt.Line2D([], [], color=LOAD, lw=1, label="measured stress"), plt.Line2D([], [], color=CRK, marker="o", ls="", ms=3, label="crack inspections"),
+UG = np.linspace(1.0, 5.4, 1500)                         # log10 of the remaining life (passes)
+def dens_log(samples):
+    """Density per decade of the remaining life. The ensemble's prediction is a mixture of lognormals, so we fit a
+    Gaussian mixture to the log10 samples (1 to 5 components, chosen by BIC) and evaluate it on the grid."""
+    from sklearn.mixture import GaussianMixture
+    l = np.log10(np.asarray(samples, float)[np.asarray(samples) > 0])[:, None]
+    gm = min((GaussianMixture(k, n_init=5, random_state=0).fit(l) for k in range(1, 6)), key=lambda g: g.bic(l))
+    return np.exp(gm.score_samples(UG[:, None]))
+rk = [mk[np.argmin(np.abs(cc["tt"][mk] - fr * Kk))] for fr in FR]
+GMAX = max(dens_log(SS[r]).max() for r in rk)
+for a, fr, r in zip(axs[1], FR, rk):
+    t = cc["tt"][r]; f = dens_log(SS[r]); lo, hi = np.log10(np.quantile(SS[r], [0.05, 0.95]))
+    sel = (UG >= lo) & (UG <= hi); x = 10 ** UG
+    a.fill_between(x[sel], f[sel], color=RED, alpha=0.25, lw=0); a.plot(x, f, color=RED, lw=1.0)
+    a.axvline(Kk - t, color="k", ls="--", lw=0.7)
+    a.set_xscale("log"); a.set_xlim(10, 10 ** 5.4); a.set_ylim(0, 1.08 * GMAX); a.set_yticks([])
+    a.spines["top"].set_visible(False); a.spines["right"].set_visible(False)
+axs[1][0].set_ylabel("density per decade")
+h = [plt.Line2D([], [], color=LOAD, lw=1, label="measured stress"), 
      plt.Line2D([], [], color=RED, lw=1, label="PI-BNN prediction"), plt.Rectangle((0, 0), 1, 1, color=RED, alpha=0.25, lw=0, label="90% CI (CL = 90%)"),
-     plt.Line2D([], [], color="0.45", lw=0.6, label="current time $t$"), plt.Line2D([], [], color="k", ls="--", lw=0.7, label="true failure time")]
-fig.legend(handles=h, loc="lower center", ncol=6, fontsize=6.3, bbox_to_anchor=(0.5, -0.005), columnspacing=1.2, handlelength=1.6)
+     plt.Line2D([], [], color="0.45", lw=0.6, label="current time $t$"), plt.Line2D([], [], color="k", ls="--", lw=0.7, label="true failure")]
+fig.legend(handles=h, loc="lower center", ncol=5, fontsize=6.3, bbox_to_anchor=(0.5, -0.005), columnspacing=1.2, handlelength=1.6)
 fig.tight_layout(rect=(0, 0.055, 1, 1), h_pad=1.0, w_pad=0.4)
 fig.savefig(ROOT / "tex/figs/fig_realtime_pdf.pdf"); fig.savefig(ROOT / "figs/fig_realtime_pdf.png", dpi=300)
 print("Kf S3", Kf, "Kf SM3-2", Kk)
