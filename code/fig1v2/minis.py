@@ -28,8 +28,8 @@ fig.tight_layout(pad=0.2); fig.savefig(O + "m_miner.png", transparent=True); plt
 P = pickle.load(open("/home/claude/paper/results/pred_S3_iid_n600_s0_base.pkl", "rb")); c = P["c"]; idx = np.asarray(P["idx"])
 S = np.asarray(P["preds"]["PI-BNN (proposed) + CP"][1]); m = np.where(idx == 17)[0]; Kf = c["Kf"][m][0]
 r = m[np.argmin(np.abs(c["tt"][m] - 0.5 * Kf))]; t0 = c["tt"][r]; sm = S[r][S[r] > 0]
-kde = gaussian_kde(np.log(sm), bw_method=0.7); g = np.linspace(0, 1.6 * Kf, 800); f = np.zeros_like(g); mm = g > t0
-f[mm] = kde(np.log(g[mm] - t0)) / (g[mm] - t0); lo, hi = t0 + np.quantile(sm, [0.05, 0.95])
+_l=np.log(sm[sm>0]); _q05,_q50,_q95=np.quantile(_l,[.05,.5,.95]); _sd=(_q95-_q05)/(2*1.6449); g = np.linspace(0, 1.6 * Kf, 800); f = np.zeros_like(g); mm = g > t0
+f[mm] = np.exp(-0.5*((np.log(g[mm]-t0)-_q50)/_sd)**2) / (g[mm] - t0); lo, hi = t0 + np.quantile(sm, [0.05, 0.95])
 fig, ax = plt.subplots(figsize=(2.0, 1.6), dpi=400)
 ax.plot(g, f, color=CORAL, lw=1.3); sel = (g >= lo) & (g <= hi); ax.fill_between(g[sel], f[sel], color=CORAL, alpha=0.22, lw=0)
 ax.axvline(t0, color="0.35", lw=0.7, ls=(0, (3, 2))); ax.set_ylim(0, 1.15 * f.max()); ax.set_xlim(0, g[-1]); ax.set_yticks([])
