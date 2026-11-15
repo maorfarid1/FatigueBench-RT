@@ -24,9 +24,13 @@ def pdf_T(samples, t, grid):
     return f                                                  # density of T = t + RUL; zero before t (Heaviside)
 
 def cdf_T(samples, t, grid):
-    l = np.sort(np.log(np.asarray(samples, float)[np.asarray(samples) > 0])); p = (np.arange(l.size) + 0.5) / l.size
+    """Kernel-smoothed CDF of the stored samples in log space (Gaussian kernel, Silverman bandwidth).
+    200 samples give a staircase; smoothing removes the steps without moving the curve."""
+    from scipy.stats import norm
+    l = np.log(np.asarray(samples, float)[np.asarray(samples) > 0])
+    iqr = np.subtract(*np.quantile(l, [0.75, 0.25])); h = 0.45 * min(l.std(), iqr / 1.34) * l.size ** -0.2
     F = np.zeros_like(grid); m = grid > t
-    F[m] = np.interp(np.log(grid[m] - t), l, p, left=0.0, right=1.0)   # empirical CDF of the stored samples
+    F[m] = norm.cdf((np.log(grid[m] - t)[:, None] - l[None, :]) / h).mean(1)
     return F
 
 def interval(samples, t):
